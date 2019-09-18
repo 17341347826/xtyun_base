@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="jquery.min.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>进入项目</title>
+</head>
+<style>
+    body {
+        padding: 125px;
+        background: url("image/5.png") no-repeat;
+        background-size: 100%;
+        height:100%;
+        width:100%;
+        overflow: hidden;
+    }
+    div {
+        background-color: #63cded;
+        border-radius: 5px;
+        height: 80px;
+        width: 200px;
+        color: #fff;
+        text-align: center;
+        line-height: 80px;
+        display: inline-block;
+        margin: 0 25px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 600;
+        box-shadow: 8px 8px 18px #b8bea9;
+    }
+    div:hover {
+        background-color: cornflowerblue;
+        box-shadow: 8px 8px 20px transparent;
+    }
+</style>
+<body>
+
+</body>
+<script>
+    var systemList;
+    var token = sessionStorage.getItem("token");
+    var userInfo = sessionStorage.getItem("user_info");
+    // 递归获取菜单
+    function filterArray(arr, parentId) {
+        let tree = [];
+        let temp;
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i].menu_info_do.parent_id === parentId) {
+                let obj = arr[i];
+                temp = this.filterArray(arr, arr[i].menu_info_do.id);
+                if (temp.length > 0) {
+                    obj.children = temp;
+                }
+                tree.push(obj);
+            }
+        }
+        return tree;
+    }
+    // 菜单排序
+    function compare(x, p, k) {
+        return function(a,b){
+            var value3 = a[x];
+            var value4 = a[x];
+            if (value3 === value4) {
+                var value1 = a[p][k];
+                var value2 = b[p][k];
+                return value1 - value2;
+            } else {
+                return value3 - value4;
+            }
+        }
+    }
+    $(document).ready(function () {
+        userInfo = JSON.parse(userInfo);
+        if (!token) {
+            alert('请先登录');
+            window.location = 'login.html';
+            return;
+        }
+        let data = {status:'1'};
+        data = JSON.stringify(data);
+        $.ajax({
+            method: "POST",
+            url: '/api/sys_system_name/find_list',
+            dataType: "json",
+            contentType: 'application/json',
+            headers: {'token': token},
+            data: data,
+            success: function (repsData, statusCode, xhr) {
+                if (Number(repsData.status) !== 200) { /*失败*/
+                    alert(repsData.message)
+                } else { /*成功*/
+                    systemList = repsData.data.list;
+                    let html = '';
+                    for (let i = 0; i < systemList.length; i++) {
+                        html +=`<div onclick="clickBack('${i}');">${systemList[i].system_name}</div>`;
+                    }
+                    $('body').html(html);
+                }
+            },
+            error: function (repsData, status, xhr) {
+                console.log(repsData.status)
+            }
+        })
+    });
+
+    function clickBack(i) {
+        let data = { role_id: userInfo.role_info.id, system_id: systemList[i].id, };
+        data = JSON.stringify(data);
+        $.ajax({
+            method: "POST",
+            url: '/api/unit_and_role_and_menu_info/find_menus_by_user',
+            dataType: "json",
+            contentType: 'application/json',
+            headers: {'token': token},
+            data: data,
+            success: function (repsData) {
+                if (Number(repsData.status) !== 200) { /*失败*/
+                    alert(repsData.message)
+                } else { /*成功*/
+                    sessionStorage.setItem("system_id", systemList[i].id);
+                    let arrMenu = repsData.data.list;
+                    let index = 0;
+                    let menuList = [];
+                    for (let i = 0; i < arrMenu.length; i ++) {
+                        if (arrMenu[i].menu_info_do.parent_id === '0') {
+                            menuList.push(arrMenu[i]);
+                            menuList[index].children = [];
+                            menuList[index].children = filterArray(arrMenu, arrMenu[i].menu_info_do.id);
+                            menuList[index].children.sort(compare('xh','menu_info_do', 'order_number'));
+                            menuList.sort(compare('xh','menu_info_do', 'order_number'));
+                            index++;
+                        }
+                    }
+                    sessionStorage.setItem('menuList',JSON.stringify(arrMenu));
+                    sessionStorage.setItem('menuTree',JSON.stringify(menuList));
+                    let url;
+                    for (let i = 0; i < menuList.length; i++) {
+                        if(menuList[i].menu_info_do.url)  {
+                            url = menuList[i].menu_info_do.url;
+                            break;
+                        }else {
+                            url = findFirstUrlInTree(menuList[i]);
+                            if (url) { break; }
+                        }
+                    }
+                    console.log(url);
+                    if (systemList[i].id === '00000001555377849508560970EBF54E') {
+                        window.location.href = window.location.origin + systemList[i].main_index + 'home';
+                        return;
+                    }
+                    window.location.href = window.location.origin + systemList[i].main_index + url;
+                }
+            },
+            error: function (repsData) {
+                console.log(repsData.status)
+            }
+        })
+
+    }
+    function createTree(value,arr){
+
+    }
+
+
+    function findFirstUrlInTree(menu) {
+        if(menu && menu.children) {
+            for(let i = 0;i < menu.children.length;i++) {
+                if(menu.children[i].menu_info_do.url && menu.children[i].menu_info_do.menu_type !== 2) {
+                    return menu.children[i].menu_info_do.url;
+                }else {
+                    let result = findFirstUrlInTree(menu.children[i]);
+                    if(result) {
+                        return result;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+</script>
+</html>

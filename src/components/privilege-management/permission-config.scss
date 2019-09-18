@@ -1,0 +1,107 @@
+.permission-wrap{
+  width: 1188px;
+  margin-top: 10px;
+  margin-left: 137px;
+  background-color: #FFFFFF;
+  .top{
+    height: 54px;
+    line-height: 54px;
+    font-size: 20px;
+    text-align: center;
+    color:rgba(119,119,119,1);
+    background-color:rgba(243,243,243,1);
+    border:1px solid rgba(224,224,224,1)
+  }
+  .main-container{
+    padding: 24px;
+    .title{
+      height: 36px;
+      line-height: 36px;
+      text-align: left;
+      font-size:18px;
+      font-weight:bold;
+      color:rgba(142,142,142,1);
+
+      .y_span{
+        display: inline-block;
+        width: 2px;
+        height: 16px;
+        margin-right: 10px;
+        background:rgba(187,187,187,1);
+      }
+    }
+    .main-wrap{
+      margin-top: 10px;
+      margin-bottom: 20px;
+      padding-left: 11px;
+      text-align: left;
+    }
+    .fun{
+      display: inline-block;
+      height: 34px;
+      line-height: 34px;
+      font-size: 16px;
+      margin-right: 90px;
+      cursor: pointer;
+    }
+    .permission-icon{
+      display: inline-block;
+      width: 25px;
+      height: 24px;
+      vertical-align: sub;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .set{
+      background-image:url("../../assets/privilege/set.png");
+    }
+    .student{
+      background-image:url("../../assets/privilege/stu.png");
+    }
+    .school{
+      background-image:url("../../assets/privilege/school.png");
+    }
+    .teacher{
+      background-image:url("../../assets/privilege/teacher.png");
+    }
+    .user-set{
+      background-image:url("../../assets/privilege/user-set.png");
+    }
+    .grade-check{
+      background-image:url("../../assets/privilege/grade-check.png");
+    }
+    .score-analysis{
+      background-image:url("../../assets/privilege/score-analy.png");
+    }
+    .error-book{
+      background-image:url("../../assets/privilege/error-book.png");
+    }
+    .programme{
+      background-image: url("../../assets/privilege/programme.png");
+    }
+    .supervise{
+      background-image: url("../../assets/privilege/supervise.png");
+    }
+    .evaluate-analysis{
+      background-image: url("../../assets/privilege/evaluate-analy.png");
+    }
+    .scroll{
+      background-image: url("../../assets/privilege/scroll.png");
+    }
+    .assembly{
+      background-image: url("../../assets/privilege/assembly.png");
+    }
+    .make-paper{
+      background-image: url("../../assets/privilege/make-paper.png");
+    }
+    .vk{
+      background-image: url("../../assets/privilege/micro-lesson.png");
+    }
+    .warehouse{
+      background-image: url("../../assets/privilege/warehouse.png");
+    }
+    .item-bank{
+      background-image: url("../../assets/privilege/Item-bank.png");
+    }
+  }
+}

@@ -1,0 +1,3 @@
+[submodule "src/common"]
+	path = src/common
+	url = http://192.168.0.210:9999/xty_dev/xty_web/vue_common.git

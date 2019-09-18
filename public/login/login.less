@@ -1,0 +1,219 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+#login_wrap {
+    @bg-color:#ffffff;
+    min-width: 1200px;
+    .login-head {
+        font-size: 18px;
+        color: #b3b3b3;
+        background-color: @bg-color;
+        .head-content{
+            width: 80%;
+            margin: 0 auto;
+            height: 70px;
+            line-height: 70px;
+            display: flex;
+        }
+        .head-left,.head-right{
+            flex: 1;
+        }
+        .head-logo{
+            width: 130px;
+            height: 51px;
+            margin-top: 10px;
+        }
+        .head-right{
+            text-align: right;
+            span{
+                vertical-align: middle;
+            }
+        }
+        .phone-icon{
+            width: 25px;
+            height: 21px;
+            vertical-align: middle;
+        }
+    }
+    .login-main{
+        @my-radius:20px;
+        //min-height: 550px;
+        overflow: hidden;
+        background: linear-gradient(45deg, #249ffd, #23fcf5);
+        .main-wrap{
+            position: relative;
+            width: 80%;
+            height: 100%;
+        }
+        .main-img{
+            position: absolute;
+            left: 8%;
+            top: 11%;
+            width: 48%;
+            @media screen and (max-width: 1370px) {
+                width: 52%;
+            }
+        }
+        .login-content{
+            position: absolute;
+            top: 11%;
+            right: 10%;
+            margin-right: -324px;
+            padding: 28px 38px 17px;
+            background-color: @bg-color;
+            border-radius: 6px;
+            .title{
+                margin-bottom: 28px;
+                font-size: 26px;
+                color: #08b798;
+                text-align: center;
+            }
+            .input-wrap{
+                width: 274px;
+                @media screen and (max-width: 1370px) {
+                    width: 230px;
+                }
+                height: 40px;
+                line-height: 40px;
+                margin-top: 20px;
+                margin-bottom: 20px;
+                display: flex;
+                padding-left: 20px;
+                padding-right: 20px;
+                border-radius: @my-radius;
+                border: 1px solid rgba(204,204,204,0.9);
+                input{
+                    flex: 1;
+                    font-size: 16px;
+                    border: none;
+                    outline: none;
+                    color: #808080;
+                }
+                input:-webkit-autofill {
+                    -webkit-box-shadow: 0 0 0px 1000px white inset;
+                    -webkit-text-fill-color: #333;
+                }
+                input::placeholder{
+                    color: #cccccc;
+                }
+                &.active{
+                    border-color: #24bfa4;
+                }
+            }
+            .login-icon{
+                display: inline-block;
+                width: 16px;
+                height: 18px;
+                margin-top: 12px;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+            .account-icon{
+                background-image: url("image/10.png");
+                &.active{
+                    background-image: url("image/9.png");
+                }
+            }
+            .pwd-icon{
+                background-image: url("image/3.png");
+                &.active{
+                    background-image: url("image/4.png");
+                }
+            }
+            .line{
+                display: inline-block;
+                width: 1px;
+                height: 18px;
+                margin-left: 10px;
+                margin-right: 10px;
+                margin-top: 12px;
+                background-color: #cccccc;
+                &.active{
+                   background-color: #24bfa4;
+                }
+            }
+            .pwd-ctr{
+                margin-top: -4px;
+                display: flex;
+                font-size: 12px;
+                color: #666666;
+                .left,.right{
+                    flex: 1;
+                    height: 16px;
+                    line-height: 16px;
+                    cursor: pointer;
+                }
+                .left{
+                    padding-left: 14px;
+                    text-align: left;
+                }
+                .left-check{
+                    width: 12px;
+                    height: 12px;
+                    margin-right: 4px;
+                    margin-bottom: -2px;
+                    display: inline-block;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-image: url("image/6.png");
+                    user-select: none;
+                    &.checked{
+                        background-image: url("image/7.png");
+                    }
+                }
+                .right{
+                    padding-right: 14px;
+                    text-align: right;
+                }
+            }
+            .login-btn{
+                margin-top: 28px;
+                height: 40px;
+                line-height: 40px;
+                font-size: 16px;
+                text-align: center;
+                color: @bg-color;
+                border-radius: @my-radius;
+                background-color: #08b798;
+                cursor: pointer;
+                user-select: none;
+            }
+            .error-msg{
+                height: 30px;
+                line-height: 30px;
+                font-size: 12px;
+                color: rgba(255,0,0,0.8);
+                text-align: center;
+
+            }
+            .rw{
+                margin-top: 30px;
+                display: flex;
+                img{
+                    width: 70px;
+                    height: 70px;
+                }
+                .each-rw{
+                    flex: 1;
+                    text-align: center;
+                    font-size: 12px;
+                    color: #b3b3b3;
+                    text-align: center;
+                }
+            }
+        }
+    }
+    .b-q{
+        position: absolute;
+        bottom: 10px;
+        width: 100%;
+        text-align: center;
+        color: @bg-color;
+        font-size: 12px;
+        a{
+            color: @bg-color;
+            text-decoration: none;
+        }
+    }
+}

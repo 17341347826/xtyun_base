@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<!--    清除缓存-->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+<!--    -->
+    <title>系统选择</title>
+    <link href="./system.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="element/element.css">
+</head>
+<body>
+<div class="system-wrap" id="system" @click="closeRoles">
+    <div class="head-wrap">
+        <div class="head">
+            <div class="left">
+                <img src="image/logo.png" class="logo"/>
+                <span class="line"></span>
+                <img src="image/title.png" class="title">
+            </div>
+            <div class="right">
+                <span class="msg"></span>
+                <img :src="user_info.head_sculpture" alt="图片" v-if="user_info.head_sculpture" />
+                <img src="image/user_default.png" class="portrait" v-if="!user_info.head_sculpture" alt="图片"/>
+                <span class="name" v-if="user_info.user_name" v-text="user_info.user_name" @click.stop="roleListShow"></span>
+                <span class="name" v-else="user_info.custom_user_name" v-text="user_info.custom_user_name" @click.stop="roleListShow"></span>
+                <span class="dir" @click.stop="roleListShow"></span>
+
+                <div class="select" v-show="show_role_list">
+                    <ul>
+                        <li v-for="el in user_info.role_info_list" v-text="el.role_name" @click.stop="changeRole(el)"
+                            v-show="el.id != user_info.role_info.id"></li>
+                        <li @click="exit">退出</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="system-content" style="min-height: calc(100vh - 177px);">
+        <div class="msg">
+            “新分数”精准教学综合应用平台主要围绕K12过程中的教、学、测、评、练环节展开，客观诊断学生学习成果、全面评价学校教学水平的教学评价系统。系统从设置试卷试题属性信息、设置各类分析参数等教学评价的关键环节着手，通过智能分析工具，快速帮助教师完成科学的教学评价流程，分析学生的学习过程和达到的学业水平，诊断教学中存在的问题，从而促进教师、学生的发展，力图对学生个体、群体的学业能力及教师教学水平做出全面分析与诊断，促进教学与管理的有效结合，为学校发展和教学决策提供服务。
+        </div>
+        <transition name="system">
+            <div class="system-item" v-show="is_show">
+                <div class="each-item" v-for="el in systemList" :class="[el.class_name]" @click="chooseSystem(el)"
+                     :key="el.id">
+                    <div class="item-title">{{el.system_name}}</div>
+                    <div class="item-msg">{{el.system_explain}}</div>
+                </div>
+            </div>
+        </transition>
+    </div>
+    <div class="bottom">
+        <img src="./image/bottom-title.png" alt="图片">
+    </div>
+
+</div>
+
+<script src="js/vue.js"></script>
+<script src="js/browser.min.js"></script>
+<script src="js/polyfill.min.js"></script>
+<script src="js/axios.min.js"></script>
+<script src="element/element.js"></script>
+<script type="text/babel">
+    var vm = new Vue({
+        el: '#system',
+        data() {
+            return {
+                systemList: [],
+                is_show: false,
+                user_info: '',
+                show_role_list:false
+            }
+        },
+        mounted() {
+            const self = this
+            const token = sessionStorage.getItem('token')
+            if(!token || token==''){
+                window.location = 'login.html';
+                return
+            }
+            this.inter_axios()
+            this.init()
+        },
+        methods: {
+            init() {
+                var user_info = sessionStorage.getItem('user_info');
+                this.user_info = JSON.parse(user_info)
+                this.is_show = true
+                this.listSystem();
+            },
+            closeRoles(){
+                this.show_role_list = false
+            },
+            roleListShow(){
+                this.show_role_list = !this.show_role_list;
+            },
+            exit(){
+                axios.post('/api/xtyun_base/user/logout').then(res=>{
+
+                }).catch(err=>{
+
+                })
+                sessionStorage.removeItem('token');
+                sessionStorage.removeItem('user_info');
+                sessionStorage.removeItem('system_id');
+                sessionStorage.removeItem('menu');
+                sessionStorage.removeItem('menuList');
+                sessionStorage.removeItem('menuTree');
+                sessionStorage.removeItem('secondMenu');
+                sessionStorage.removeItem('exam');
+                window.location.href = window.location.origin + '/login/login.html';
+            },
+            /**
+             * 切换角色
+             * */
+            changeRole(role) {
+                this.$confirm('是否确认切换角色？', '确认信息', {
+                    distinguishCancelAndClose: true,
+                    confirmButtonText: '确认',
+                    cancelButtonText: '取消'
+                }).then(res=>{
+                    this.show_role_list = false
+                    axios.post('/api/xtyun_base/user/save_or_modify_user_info',{
+                        role_info:{id:this.user_info.id},
+                        id:role.id,
+                        ids:this.getIds(),
+                    }).then(res=>{
+                        if(!res || !res.data) return;
+                        this.$message('角色切换成功')
+                        this.user_info.role_info = role;
+                        sessionStorage.setItem('user_info',JSON.stringify(this.user_info));
+                        this.init()
+                    }).catch(error=>{
+
+                    })
+                }).catch(err=>{
+
+                })
+            },
+            getIds(){
+                let ids = [];
+                for (let i = 0, len = this.user_info.role_info_list.length; i < len; i++) {
+                    ids.push(this.user_info.role_info_list[i].id);
+                }
+                return ids.join()
+            },
+            inter_axios() {
+                axios.interceptors.request.use(
+                    function (config) {
+                        const token = sessionStorage.getItem('token')
+                        if (token) {
+                            config.headers['Token'] = token
+                        }
+                        return config;
+                    },
+                    function (error) {
+                        return Promise.reject(error);
+                    }
+                );
+            },
+            findFirstUrlInTree(menu) {
+                if (menu && menu.children) {
+                    for (let i = 0; i < menu.children.length; i++) {
+                        if (menu.children[i].menu_info_do.url && menu.children[i].menu_info_do.menu_type !== 2) {
+                            return menu.children[i].menu_info_do.url;
+                        } else {
+                            let result = this.findFirstUrlInTree(menu.children[i]);
+                            if (result) {
+                                return result;
+                            }
+                        }
+                    }
+                }
+                return null;
+            },
+            filterArray(arr, parentId) {
+                let tree = [];
+                let temp;
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i].menu_info_do.parent_id === parentId) {
+                        let obj = arr[i];
+                        temp = this.filterArray(arr, arr[i].menu_info_do.id);
+                        if (temp.length > 0) {
+                            obj.children = temp;
+                        }
+                        tree.push(obj);
+                    }
+                }
+                tree.sort(this.compare('xh','menu_info_do', 'order_number'));
+                return tree;
+            },
+            compare(x, p, k) {
+                return function (a, b) {
+                    var value3 = a[x];
+                    var value4 = a[x];
+                    if (value3 === value4) {
+                        var value1 = a[p][k];
+                        var value2 = b[p][k];
+                        return value1 - value2;
+                    } else {
+                        return value3 - value4;
+                    }
+                }
+            },
+            /**
+             * 选择系统菜单
+             * @param system
+             */
+            chooseSystem(system) {
+                var loading = this.$loading({
+                    lock: true,
+                    text: '加载中',
+                    background: "rgba(0,0,0,0.7)"
+                })
+                axios.post('/api/unit_and_role_and_menu_info/find_menus_by_user', {
+                    role_id: this.user_info.role_info.id,
+                    system_id: system.id
+                }).then((res) => {
+                    loading.close()
+                    if (res.status != 200 || res.data.status != 200) {
+                        this.$message.error(res.data.message)
+                        return
+                    }
+
+                    let arrMenu = res.data.data.list;
+                    let index = 0;
+                    let menuList = [];
+                    for (let i = 0; i < arrMenu.length; i++) {
+                        if (arrMenu[i].menu_info_do.parent_id === '0') {
+                            menuList.push(arrMenu[i]);
+                            menuList[index].children = [];
+                            menuList[index].children = this.filterArray(arrMenu, arrMenu[i].menu_info_do.id);
+                            index++;
+                        }
+                    }
+                    menuList.sort(this.compare('xh', 'menu_info_do', 'order_number'));
+                    sessionStorage.setItem("system_id", system.id);
+                    sessionStorage.setItem('menuList', JSON.stringify(arrMenu));
+                    sessionStorage.setItem('menuTree', JSON.stringify(menuList));
+                    let url;
+                    for (let i = 0; i < menuList.length; i++) {
+                        if (menuList[i].menu_info_do.url) {
+                            url = menuList[i].menu_info_do.url;
+                            break;
+                        } else {
+                            url = this.findFirstUrlInTree(menuList[i]);
+                            if (url) {
+                                break;
+                            }
+                        }
+                    }
+                    if (system.id === '00000001555377849508560970EBF54E') {
+                        window.location.href = window.location.origin + system.main_index;
+                        return;
+                    }
+                    if (!url || url == '') {
+                        this.$message.error('无菜单地址信息')
+                        return;
+                    }
+                    window.location.href = window.location.origin + system.main_index + url;
+                }).catch((err) => {
+                    loading.close()
+                    this.$message.error('接口请求错误')
+                })
+            },
+            /**
+             * 获取系统菜单
+             */
+            listSystem() {
+                var loading = this.$loading({
+                    lock: true,
+                    text: '加载中',
+                    background: "rgba(0,0,0,0.7)"
+                })
+                axios.post('/api/sys_system_name/find_list', {
+                    status: '1'
+                }).then((res) => {
+                    loading.close()
+                    if (res.status != 200 || res.data.status != 200) {
+                        this.$message.error(res.data.message)
+                        return
+                    }
+                    const list = res.data.data.list;
+                    for (let i = 0, len = list.length; i < len; i++) {
+                        list[i].class_name = 'f' + i % 7;
+                    }
+                    this.systemList = list;
+                    if (this.systemList.length == 0) {
+                        this.$alert('无系统菜单信息', '提示信息', {
+                            confirmButtonText: '确定',
+                            callback: action => {
+
+                            }
+                        });
+                    }
+                }).catch((err) => {
+                    loading.close()
+                    this.$message.error('接口请求错误')
+                })
+            }
+        }
+    })
+</script>
+</body>
+</html>

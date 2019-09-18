@@ -1,0 +1,135 @@
+.manage-wrap, .user-p-wrap {
+  width: 1188px;
+  margin-left: 137px;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 1);
+  .each-sel {
+    margin-right: 10px;
+  }
+  .table-wrap {
+    border: 1px solid rgba(230, 230, 230, 1);
+    margin-top: 12px;
+  }
+  .config-btn-n {
+    display: inline-block;
+    width: 26px;
+    height: 25px;
+    background: url("../../assets/icon/quanxian-n.png") no-repeat center;
+  }
+  .config-btn {
+    display: inline-block;
+    width: 26px;
+    height: 25px;
+    background: url("../../assets/privilege/config.png") no-repeat center;
+  }
+  .config-btn, .update-btn, .delete-btn {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 3px;
+    margin-right: 3px;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .config-btn {
+    background-image: url("../../assets/privilege/user-config.png");
+  }
+  .config-btn:hover {
+    background-image: url("../../assets/privilege/config-hover.png");
+  }
+  .update-btn {
+    background-image: url("../../assets/privilege/update-config.png");
+  }
+  .update-btn:hover {
+    background-image: url("../../assets/privilege/update-hover.png");
+  }
+  .delete-btn {
+    background-image: url("../../assets/privilege/delete-config.png");
+  }
+  .delete-btn:hover {
+    background-image: url("../../assets/privilege/delete-hover.png");
+  }
+}
+
+#add_user {
+  .el-select {
+    width: 100%;
+  }
+}
+
+/*新增按钮*/
+.pt_btn, .pt_btn:hover {
+  min-width:110px;
+  height: 36px;
+  font-size:18px;
+  background: #ddd;
+  color: #fff;
+  border-radius:4px;
+  margin-bottom: 15px;
+  cursor:no-drop;
+  border: none;
+}
+.add_btn {
+  min-width:110px;
+  height: 36px;
+  font-size:18px;
+  background:rgba(21,193,163,1);
+  border-radius:4px;
+  margin-bottom: 15px;
+  color: #fff;
+}
+.add_btn:hover {
+  background:rgba(40,225,192,1);
+}
+.add_btn:active {
+  background:rgba(9,147,123,1);
+}
+.add_span {
+  width:36px;
+  line-height: 22px;
+  font-size:18px;
+  font-weight:400;
+  color:rgba(255,255,255,1);
+}
+.add_img {
+  height:24px;
+}
+.add_btn span, .pt_btn span {
+  display: flex;
+}
+
+.add_btn img, .pt_btn img {
+  margin-right: 8px;
+}
+/*修改/新增弹框按钮*/
+.update_btn_confirm, .update_btn_confirm:hover, .update_btn_confirm:active {
+  height:29px;
+  line-height: 5px;
+  background:rgba(13,186,158,1);
+  border-radius:4px;
+}
+.update_btn_cancel, .update_btn_cancel:hover, .update_btn_cancel:active {
+  height:29px;
+  line-height: 5px;
+  margin-right: 45px;
+  border:1px solid rgba(191,191,191,1);
+  border-radius:4px;
+}
+/*删除弹框按钮*/
+.del_btn_confirm, .del_btn_confirm:hover, .del_btn_confirm:active {
+  height:28px;
+  line-height: 5px;
+  background:rgba(247,135,68,1);
+  border-radius:4px;
+  color: #fff;
+}
+.del_btn_cancel, .del_btn_cancel:hover, .del_btn_cancel:active {
+  height:28px;
+  line-height: 5px;
+  margin-right: 45px;
+  border:1px solid rgba(191,191,191,1);
+  border-radius:4px;
+}
+

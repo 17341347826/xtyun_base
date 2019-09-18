@@ -1,0 +1,173 @@
+.projects {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  text-align: left;
+}
+
+.menu_mana {
+  width: 1188px;
+  margin-left: 137px;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+
+#btn-wrap{
+  display: flex;
+  flex-wrap: wrap;
+  .role-btn{
+    margin-left: 0;
+    margin-right: 10px;
+    min-width: 126px;
+    margin-bottom: 6px;
+  }
+  .btn-active{
+    background-color: #67c23a;
+    color: #FFFFFF;
+  }
+}
+
+.rank-wrap {
+  display: flex;
+  margin-top: 16px;
+  .rank-model {
+    flex: 1;
+    border: 1px solid rgba(238, 238, 238, 1);
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+.top {
+  position: relative;
+  height: 35px;
+  line-height: 35px;
+  background-color: rgba(246, 246, 246, 1);
+  font-size: 16px;
+  i {
+    position: absolute;
+    right: 15px;
+    top: 9px;
+    cursor: pointer;
+  }
+}
+
+.menu-content {
+  min-height: 300px;
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    li {
+      list-style: none;
+      height: 40px;
+      line-height: 40px;
+      padding-left: 10px;
+      padding-right: 10px;
+      font-size: 14px;
+      text-align: left;
+      cursor: pointer;
+      color: rgba(119, 119, 119, 1);
+      border-bottom: 1px solid rgba(238, 238, 238, 1);
+    }
+  }
+  .dir-active{
+    background-color: rgba(187,237,220,.6);
+  }
+}
+
+.upload-wrap {
+  position: relative;
+
+}
+
+.img-icon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  vertical-align: sub;
+  margin-right: 5px;
+}
+.menu-icon{
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: sub;
+  float: right;
+  margin-top: 14px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+/*新增按钮*/
+.pt_btn, .pt_btn:hover {
+  min-width:110px;
+  height: 36px;
+  font-size:18px;
+  background: #ddd;
+  color: #fff;
+  border-radius:4px;
+  margin-bottom: 15px;
+  cursor:no-drop;
+  border: none;
+}
+.add_btn {
+  min-width:110px;
+  height: 36px;
+  font-size:18px;
+  background:rgba(21,193,163,1);
+  border-radius:4px;
+  margin-bottom: 15px;
+}
+.add_btn:hover {
+  background:rgba(40,225,192,1);
+}
+.add_btn:active {
+  background:rgba(9,147,123,1);
+}
+.add_span {
+  width:36px;
+  line-height: 22px;
+  font-size:18px;
+  font-weight:400;
+  color:rgba(255,255,255,1);
+}
+.add_img {
+  height:24px;
+}
+.add_btn span, .pt_btn span {
+  display: flex;
+}
+
+.add_btn img, .pt_btn img {
+  margin-right: 8px;
+}
+/*修改/新增弹框按钮*/
+.update_btn_confirm, .update_btn_confirm:hover, .update_btn_confirm:active {
+  height:29px;
+  line-height: 5px;
+  background:rgba(13,186,158,1);
+  border-radius:4px;
+}
+.update_btn_cancel, .update_btn_cancel:hover, .update_btn_cancel:active {
+  height:29px;
+  line-height: 5px;
+  margin-right: 45px;
+  border:1px solid rgba(191,191,191,1);
+  border-radius:4px;
+}
+/*删除弹框按钮*/
+.del_btn_confirm, .del_btn_confirm:hover, .del_btn_confirm:active {
+  height:28px;
+  line-height: 5px;
+  background:rgba(247,135,68,1);
+  border-radius:4px;
+}
+.del_btn_cancel, .del_btn_cancel:hover, .del_btn_cancel:active {
+  height:28px;
+  line-height: 5px;
+  margin-right: 45px;
+  border:1px solid rgba(191,191,191,1);
+  border-radius:4px;
+}
+

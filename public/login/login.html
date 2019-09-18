@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--    清除缓存-->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <!--    -->
+    <title>新分数登录</title>
+    <link href="./login.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="element/element.css">
+
+</head>
+<body>
+<div class="login-wrap" id="login_wrap">
+    <div class="login-head">
+        <div class="head-content">
+            <div class="head-left">
+                <img src="image/8.png" class="head-logo" alt="logo"/>
+            </div>
+            <div class="head-right">
+                <img src="image/2.png" align="图片" class="phone-icon">
+                <span>服务热线：400-028-4088</span>
+            </div>
+        </div>
+
+    </div>
+    <div class="login-main" style="height: calc(100vh - 70px);">
+        <div class="main-wrap">
+            <img src="image/1.png" class="main-img" alt="图片">
+            <div class="login-content">
+                <div class="title">用户登录</div>
+                <div class="input-wrap " :class="{'active':now_input=='user_account'}">
+                    <span class="login-icon account-icon " :class="{'active':now_input=='user_account'}"></span>
+                    <span class="line" :class="{'active':now_input=='user_account'}"></span>
+                    <input type="text" placeholder="请输入账号" autocomplete="off" v-model="user_account"
+                           @focus="focus_input('user_account')">
+                </div>
+                <div class="input-wrap" :class="{'active':now_input=='user_password'}">
+                    <span class="login-icon pwd-icon" :class="{'active':now_input=='user_password'}"></span>
+                    <span class="line" :class="{'active':now_input=='user_password'}"></span>
+                    <input type="password" placeholder="请输入密码" autocomplete="off" v-model="user_password"
+                           @focus="focus_input('user_password')">
+                </div>
+                <div class="pwd-ctr">
+                    <div class="left" @click="change_remember">
+                        <span class="left-check" :class="{'checked':is_remember}"></span>记住密码
+                    </div>
+                    <div class="right">忘记密码</div>
+                </div>
+                <div class="login-btn" @click="login">
+                    登录
+                </div>
+                <div class="error-msg">{{error_msg}}</div>
+                <div class="rw">
+                    <div class="each-rw">
+                        <img src="image/rw.jpg" alt="图片">
+                        <div>关注微信公众号</div>
+                    </div>
+                    <div class="each-rw">
+                        <img src="image/rw.jpg" alt="图片">
+                        <div>扫一扫下载APP</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="b-q">
+        版权所有 : 2007-2019 &copy<a href="http://www.uptang.com.cn" target="_blank">成都兴唐信息技术有限公司</a>
+        <a href="http://beian.miit.gov.cn" target="_blank">蜀ICP备07501515号</a>
+    </div>
+</div>
+<script src="js/vue.js"></script>
+<script src="js/browser.min.js"></script>
+<script src="js/polyfill.min.js"></script>
+<script src="js/axios.min.js"></script>
+<script src="element/element.js"></script>
+<script type="text/babel">
+    var vm = new Vue({
+        el: '#login_wrap',
+        data() {
+            return {
+                user_account: '',
+                user_password: '',
+                now_input: '',
+                is_remember: false,
+                show_layer: false,
+                error_msg: ''
+            }
+        },
+        mounted() {
+            const self = this;
+            document.onkeydown = function (event) {
+                var e = event || window.event;
+                if (e && e.keyCode == 13) { //回车键的键值为13
+                    self.login()
+                }
+            };
+            let is_remember = localStorage.getItem('remember');
+            if (!is_remember) {
+                is_remember = false;
+            }
+            this.is_remember = is_remember;
+            this.get_user_account()
+        },
+        methods: {
+            login() {
+                if (this.user_account.trim() == '') {
+                    this.error_msg = '请输入账号'
+                    return
+                }
+                if (this.user_password.trim() == '') {
+                    this.error_msg = '请输入密码'
+                    return
+                }
+                var loading = this.$loading({
+                    lock: true,
+                    text: '加载中',
+                    background: "rgba(0,0,0,0.7)"
+                })
+                axios.post('/api/user/login', {
+                    user_account: this.user_account,
+                    user_password: this.user_password
+                }).then(res => {
+                    loading.close()
+                    this.change_session()
+                    if (res.status != 200 || res.data.status != 200) {
+                        this.error_msg = res.data.message
+                        return
+                    }
+                    const new_data = res.data.data;
+                    sessionStorage.setItem("token", new_data.token);
+                    sessionStorage.setItem("user_info", JSON.stringify(new_data.user_info));
+                    window.location = 'system.html';
+                    document.onkeydown = null
+                }).catch(err => {
+                    loading.close()
+                    this.$message.error('接口请求错误')
+                })
+
+            },
+            focus_input(w) {
+                this.now_input = w;
+                this.error_msg = ''
+            },
+            change_remember() {
+                this.is_remember = !this.is_remember;
+            },
+            change_session() {
+                localStorage.setItem('remember', this.is_remember)
+                if (this.is_remember) {
+                    localStorage.setItem('account_session', JSON.stringify({
+                        account: this.user_account,
+                        password: this.user_password
+                    }))
+                    return
+                }
+                localStorage.removeItem('account_session')
+                localStorage.removeItem('remember')
+            },
+            get_user_account() {
+                if (this.is_remember) {
+                    let str = localStorage.getItem('account_session')
+                    const user_info = JSON.parse(str);
+                    this.user_account = user_info.account;
+                    this.user_password = user_info.password
+                }
+            }
+        }
+    })
+</script>
+</body>
+</html>
